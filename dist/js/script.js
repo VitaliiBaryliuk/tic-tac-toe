@@ -4,7 +4,7 @@
   let lastPlayer = '0';
 
   const conditions = {
-    0: [1, 2, 3],
+    0: [0, 1, 2],
     1: [3, 4, 5],
     2: [6, 7, 8],
     3: [0, 3, 6],
@@ -65,20 +65,41 @@
   };
 
   const checkWin = (last) => {
+    let status = false;
     for (conditon in conditions) {
       const cond = conditions[conditon];
       let counter = 0;
       for (coord of cond) {
         if (fields[coord].value === last) {
           counter++;
+          console.log(counter);
           if(counter === 3) {
-            // alert(`win ${last}`);
-            setTimeout(function() { alert(`win ${last}`) }, 200);
+            status = true;
+            setTimeout(function() { 
+              alert(`win ${last}`);
+              createFields();
+              randerFields(fields);
+            }, 200);
             lastPlayer = '0';
+            
           }
         }
       }
-      counter = 0;
+    }
+    if (status === false) {
+      let i = 0;
+      let count = 0;
+      while (fields.hasOwnProperty(i)) {
+        if (fields[i].value !== '') {
+          count += 1;
+        }
+        i += 1;
+        console.log('count', count);
+        if (count === 9 && status === false) {
+          alert('DROW');
+          return true;
+        }
+      }
     }
   };
 
@@ -90,7 +111,6 @@
     setCurrentSign(event);
     randerFields(fields);
     checkWin(lastPlayer);
-    console.log(fields);
   };
   createFields();
   randerFields(fields);
